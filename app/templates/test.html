@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+	<form action="" method="POST">
+		{% if test %}
+		{% if test.percent %}
+		<h1 style="color: green;">{{test.percent}}</h1>
+		{% endif %}
+		<h1>{{ test.name }}</h1>
+		{% if test.questions %}
+		{% for question in test.questions %}
+		<div>
+			<p>{% autoescape false %}{{ question.lesson }}{% endautoescape %}</p>
+			<p><b>{{ question.blurb }}</b></p>
+			{% for answer in question.answers %}
+			<input type="radio" name="question{{question.id}}" id="question_{{question.id}}" value="{{answer}}"{% if question.selected == answer %} checked{% endif %} />
+			<label for="question{{question.id}}">{{ answer }}</label>
+			{% if question.selected == answer %}
+			{% if question.selected == question.correct_answer %}<i class="fas fa-check" style="color: green;"></i>
+			{% else %}<i class="fas fa-times" style="color: red;"></i>{% endif %}{% endif %}<br/>
+			{% endfor %}
+		</div>
+		<hr/>
+		{% endfor %}
+		{% endif %}
+		{% endif %}
+		<p><input type="submit" value="Save" /> <input type="submit" value="Submit" /></p>
+	</form>
+{% endblock %}

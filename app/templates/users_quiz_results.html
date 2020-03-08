@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+	{% if quiz %}
+	<h1>{{ quiz.name }}</h1>
+	{% if quiz_results %}
+	<p>{{user.first_name}} {{user.last_name}}<span style="float: right; text-align: right;">Date of Completion: {{ moment(quiz_results.complete_dt).format('LLL') }}</span></p>
+	{% for qu in quiz.questions %}
+	<div>
+		<p><b>{{ qu.blurb }}</b></p>
+		{% if quiz_results.answers %}
+		{% for qa in quiz_results.answers %}
+			{% for answer in qu.answers %}
+				{% if qa['id'] == qu.id %}
+					<input type="radio" name="question{{qu.id}}" id="question_{{qu.id}}" value="{{answer}}"{% if qa['answer'] == answer %} checked{% endif %} disabled />
+					<label for="question{{qu.id}}">{{ answer }}</label>
+					{% if qa['answer'] == answer %}
+						{% if qa['answer'] == qu.correct_answer %}
+							<i class="fas fa-check" style="color: green;"></i>
+						{% else %}
+							<i class="fas fa-times" style="color: red;"></i>
+						{% endif %}
+					{% endif %}<br/>
+				{% endif %}
+			{% endfor %}
+		{% endfor %}
+		{% else %}
+		{% for answer in qu.answers %}
+		<input type="radio" name="question{{qu.id}}" id="question_{{qu.id}}" value="{{answer}}" disabled />
+		<label for="question{{qu.id}}">{{answer}}</label><br/>
+		{% endfor %}
+		{% endif %}
+		<p>Correct Answer: {{ qu.correct_answer }}</p>
+	</div>
+	<hr/>
+	{% endfor %}
+	{% endif %}
+	{% endif %}
+{% endblock %}

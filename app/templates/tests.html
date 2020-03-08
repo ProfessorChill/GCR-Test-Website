@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+	{% if tests %}
+	{% for test in tests %}
+	<a href="{{ test.url }}">{{ test.name }}</a><br/>
+	{% endfor %}
+	{% endif %}
+{% endblock %}

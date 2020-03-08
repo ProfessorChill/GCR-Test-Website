@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{%- block app_content %}
+	{%- if quizes %}
+	{%- for quiz in quizes %}
+	<a href="{{ url_for('route_user_quiz', user_id=user.id, quiz_id=quiz.quiz_id) }}">{{ quiz.quiz.name }}</a>{% if quiz.complete %} - Complete - Current Score: {% if quiz.score %}{{ quiz.score }}%{% else %}0%{% endif %}{% else %} - Incomplete - Current Score: {% if quiz.score %}{{ quiz.score }}%{% else %}0%{% endif %}{% endif %}<br/>
+	{%- endfor %}
+	{%- endif %}
+{%- endblock %}

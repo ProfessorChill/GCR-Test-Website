@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+	{% if users %}
+	{% for x in range(0, users|length) %}
+	<span>{{x + 1}}) <a href="{{ url_for('route_user_data', user_id=users[x].id) }}">{{ users[x].first_name }} {{ users[x].last_name }}</a><br/>
+	{% endfor %}
+	{% endif %}
+{% endblock %}
