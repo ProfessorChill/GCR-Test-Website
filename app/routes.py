@@ -93,7 +93,10 @@ def test(test_id):
     if qry:
         if qry.answers:
             for ans in qry.answers:
-                test['questions'][ans['id']]['selected'] = ans['answer']
+                try:
+                    test['questions'][ans['id']]['selected'] = ans['answer']
+                except IndexError:
+                    continue
         test['percent'] = qry.score
     else:
         new_qa = QuizAnswers(
