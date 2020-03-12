@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from werkzeug.urls import url_parse
 from app import app, db
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Quiz, QuizAnswers
 from datetime import datetime
@@ -11,6 +11,64 @@ from config import Config
 @app.route('/')
 def index():
     return render_template('index.html', title='Tests Login Page')
+
+
+@app.route('/profile/quiz/<int:quiz_id>')
+@login_required
+def profile_quiz_display(quiz_id):
+    quiz_results = QuizAnswers.query.filter_by(
+        user_id=current_user.id, quiz_id=quiz_id).first()
+    quiz = Quiz.query.get(quiz_id)
+
+    return render_template(
+        'users_quiz_results.html',
+        title='Quiz Results',
+        quiz_results=quiz_results,
+        quiz=quiz,
+        user=current_user,
+    )
+
+
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    form = EditProfileForm()
+    quizes = QuizAnswers.query.filter_by(user_id=current_user.id)
+    quizes_formatted = []
+
+    for quiz in quizes:
+        quizes_formatted.append({
+            'id': quiz.id,
+            'quiz_id': quiz.quiz_id,
+            'score': quiz.score,
+            'complete': quiz.complete,
+            'start_dt': quiz.start_dt,
+            'complete_dt': quiz.complete_dt,
+            'quiz': Quiz.query.get(quiz.quiz_id),
+        })
+
+    if form.validate_on_submit():
+        usr = User.query.get(current_user.id)
+
+        if form.password.data:
+            usr.set_password(form.password.data)
+
+        usr.first_name = form.first_name.data
+        usr.last_name = form.last_name.data
+
+        db.session.commit()
+
+        flash('Successfully updated!')
+    else:
+        form.first_name.data = current_user.first_name
+        form.last_name.data = current_user.last_name
+
+    return render_template(
+        'profile.html',
+        title='Profile',
+        quizes=quizes_formatted,
+        form=form,
+    )
 
 
 @app.route('/reports/<int:user_id>/<int:quiz_id>')
@@ -210,7 +268,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(
-            email=form.email.data,
+            email=form.email.data.lower(),
             first_name=form.first_name.data,
             last_name=form.last_name.data,
         )

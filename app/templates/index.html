@@ -6,7 +6,11 @@
 	</div>
 	<h4>This month our company mandatory review and quiz is on:</h4><br/>
 	<ul>
-		<li><a href="https://d15cz6njn0r035.cloudfront.net/The+National+Do-Not-Call+List+Greater+Calgary+Policy.pdf">The National Do Not Call List.</a></li>
+		<li><a href="https://d15cz6njn0r035.cloudfront.net/The+National+Do-Not-Call+List+Greater+Calgary+Policy.pdf">The National Do Not Call List Policy Manual</a></li>
 	</ul><br/><br/>
+	{%- if current_user.is_anonymous %}
 	<h4><b><a href="/register">Register</a></b> and <b><a href="/login?next=%2Ftests">Login</a></b> to take the test</h4>
+	{%- else %}
+	<h4><a href="/test/2">Take the test</a></h4>
+	{%- endif %}
 {% endblock %}

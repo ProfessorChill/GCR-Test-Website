@@ -4,7 +4,12 @@
 	<form action="" method="POST">
 		{% if test %}
 		{% if test.percent %}
-		<h1 style="color: green;">{{test.percent}}</h1>
+		{% if test.percent < 100 %}
+		<h1 style="color: red;">{{test.percent|round}}</h1>
+		{% else %}
+		<h1 style="color: green;">{{test.percent|round}}%<br/> Congratulations!</h1>
+		<a href="{{ url_for('index') }}">Return Home</a>
+		{% endif %}
 		{% endif %}
 		<h1>{{ test.name }}</h1>
 		{% if test.questions %}
@@ -24,6 +29,6 @@
 		{% endfor %}
 		{% endif %}
 		{% endif %}
-		<p><input type="submit" value="Save" /> <input type="submit" value="Submit" /></p>
+		<p><input type="submit" value="Save" /> <input type="submit" value="Review" /></p>
 	</form>
 {% endblock %}

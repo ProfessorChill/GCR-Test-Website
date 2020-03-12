@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+	<h4>Edit Profile</h4>
+	<div class="row">
+		<div class="col-md-4">
+			{{ wtf.quick_form(form) }}
+		</div>
+		<div class="col-md-5">
+			{%- if quizes %}
+			{%- for quiz in quizes %}
+			<a href="{{ url_for('profile_quiz_display', quiz_id=quiz.quiz_id) }}">{{ quiz.quiz.name }}</a>{% if quiz.complete %} - Complete - Current Score: {% if quiz.score %}{{ quiz.score }}%{% else %}0%{% endif %}{% else %} - Incomplete - Current Score: {% if quiz.score %}{{ quiz.score }}%{% else %}0%{% endif %}{% endif %}<br/>
+			{%- endfor %}
+			{%- endif %}
+		</div>
+	</div>
+{% endblock %}
