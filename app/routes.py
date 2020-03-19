@@ -13,6 +13,15 @@ def index():
     return render_template('index.html', title='Tests Login Page')
 
 
+@app.route('/admin')
+@login_required
+def admin():
+    if request.remote_addr != Config().ADMIN_IP:
+        return render_template('404.html'), 404
+
+    return 'fjdksl'
+
+
 @app.route('/profile/quiz/<int:quiz_id>')
 @login_required
 def profile_quiz_display(quiz_id):
